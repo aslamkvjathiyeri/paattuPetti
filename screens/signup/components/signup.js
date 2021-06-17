@@ -32,7 +32,7 @@ function App({ navigation }) {
 
 
   function loginAction() {
-    if (checkError()) {
+    if (!checkError()) {
       const user = { username: userName, email: email, phone: mobileNum, password: password }
       dispatch(fetchUser(user, navigation))
     }
@@ -56,20 +56,20 @@ function App({ navigation }) {
   function checkError() {
     if (userName && email && mobileNum && password) {
       if (!validate(email)) {
-        return false
+        return true
       }
       else if (mobileNum.length != 10) {
-        return false
+        return true
       }
       else if (password.length < 3) {
-        return false
+        return true
       }
       else if (userName.length < 3) {
-        return false
+        return true
       }
-      else return true
+      else return false
     }
-    else return false
+    else return true
   }
 
   function showError() {
@@ -93,7 +93,7 @@ function App({ navigation }) {
     <View
       style={{ flex: 1, backgroundColor: '#fff' }}
     >
-      <KeyboardAvoidingView style={styles.container} behavior={Platform.OS == "ios" ? "height" : "height"} height={height * .8}  >
+      <KeyboardAvoidingView style={styles.container} behavior={Platform.OS == "ios" ? "height" : "height"} height={height * .9}  >
         <View style={styles.topView}>
           <Text style={styles.companyName}>123Music</Text>
           <View style={styles.iconView}>
@@ -135,7 +135,7 @@ function App({ navigation }) {
           <View style={styles.inputContainer}>
             <TextInput
               placeholder="Name"
-              style={{ fontSize: 16, paddingVertical: 0, flex: 1 }}
+              style={styles.inputField}
               onChangeText={text => setUserName(text)}
               value={userName}
             />
@@ -144,7 +144,7 @@ function App({ navigation }) {
           <View style={styles.inputContainer}>
             <TextInput
               placeholder="E-mail"
-              style={{ fontSize: 16, paddingVertical: 0, flex: 1 }}
+              style={styles.inputField}
               onChangeText={text => setEmail(text)}
               value={email}
             />
@@ -156,7 +156,7 @@ function App({ navigation }) {
               placeholder="Mobile"
               returnKeyType={'done'}
               keyboardType={'number-pad'}
-              style={{ fontSize: 16, paddingVertical: 0, flex: 1 }}
+              style={styles.inputField}
               onChangeText={text => setMobileNum(text)}
             />
             <MCicons name={"cellphone-basic"} size={21} color={"rgba(84,84,84,.5)"} />
@@ -164,7 +164,7 @@ function App({ navigation }) {
           <View style={styles.inputContainer}>
             <TextInput
               placeholder="Password"
-              style={{ fontSize: 16, paddingVertical: 0, flex: 1 }}
+              style={styles.inputField}
               onChangeText={text => setPassword(text)}
               secureTextEntry={true}
               defaultValue={password}
@@ -174,7 +174,7 @@ function App({ navigation }) {
           <View style={{ height: 30 }}>
             {showError()}
           </View>
-          <TouchableOpacity style={styles.button} onPress={loginAction}>
+          <TouchableOpacity style={[styles.button,{backgroundColor:checkError()?'#aaa':'#3464eb'}]} onPress={loginAction}>
             <Text style={styles.loginText}>REGISTER</Text>
           </TouchableOpacity>
           <Text style={styles.forgotText}>version m1.01</Text>
@@ -192,10 +192,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   topView: {
-    flex: 2,
+    flex: 2.5,
     paddingVertical: 25,
     justifyContent: "space-between",
   },
+  inputField:{ fontSize: 16, paddingVertical: 0, flex: 1 },
   companyName: {
     color: "#545454",
     fontSize: 14,
