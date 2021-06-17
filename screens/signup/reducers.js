@@ -7,9 +7,9 @@ const user = (state = initialStage, actions) => {
         case "LOGIN_FETCHING_SUCCESS":
             return { ...state, userData: actions.userData }
             break;
-        case "USER_LOGOUT":
-            return {  userData: null }
-            break;
+        // case "USER_LOGOUT":
+        //     return {  userData: null }
+        //     break;
         default:
             return state
     }

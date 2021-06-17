@@ -12,6 +12,13 @@ const appReducer = combineReducers({
      user
 })
 
+const rootReducer = (state, action) => {
+    if (action.type == 'USER_LOGOUT') {
+        state = undefined
+    }
+    return appReducer(state, action)
+}
+
 const rootPersistConfig = {
     key: 'root',
     storage: AsyncStorage,
@@ -20,7 +27,7 @@ const rootPersistConfig = {
 
 
 const store = createStore(
-    persistReducer(rootPersistConfig,appReducer),
+    persistReducer(rootPersistConfig,rootReducer),
     compose(applyMiddleware(thunk, logger))
 )
 

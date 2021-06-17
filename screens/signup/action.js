@@ -19,14 +19,14 @@ export function userLogout(aaa,navigation) {
     console.log('naaac',navigation);
     return function (dispatch) {
         dispatch({ type: 'USER_LOGOUT'})
-        navigation.dispatch(
-            CommonActions.reset({
-                index: 0,
-                routes: [
-                    { name: 'Login' }
-                ]
-            })
-        )
+        // navigation.dispatch(
+        //     CommonActions.reset({
+        //         index: 0,
+        //         routes: [
+        //             { name: 'Login' }
+        //         ]
+        //     })
+        // )
     }
 }
 

@@ -7,6 +7,7 @@ import {
     TextInput,
     FlatList,
     TouchableOpacity,
+    ActivityIndicator,
     Dimensions,
     ImageBackground,
     SafeAreaView,
@@ -21,17 +22,20 @@ const { height, width } = Dimensions.get("screen");
 function App({ navigation }) {
     const userData = useSelector(state => state.user?.userData)
     const [songsArray, setList] = useState([])
+    const [isLoading, setLoading] = useState(false)
     
     useEffect(() => {
         getPoemList()
     }, [])
     
     async function getPoemList() {
+        setLoading(true)
         let data = await fetch('https://6006c4d63698a80017de1f20.mockapi.io/songs?page=2&limit=20')
             .then((response) => response.json())
             .then((json) => {
                 console.log('rrrrr', json);
                 setList(json)
+                setLoading(false)
             })
             .catch((error) => {
                 console.error(error);
@@ -40,6 +44,7 @@ function App({ navigation }) {
 
     function onPress(item){
 console.log('item_clicked',item);
+navigation.navigate('DetailPage',{data:item})
     }
 
     function renderPoemsWaha({ item }) {
@@ -85,7 +90,8 @@ console.log('item_clicked',item);
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <View>
+                {isLoading?
+                <ActivityIndicator size={'large'} style={{paddingTop:50}}/>:
                 <FlatList
                     data={songsArray}
                     ItemSeparatorComponent={renderHeader}
@@ -93,8 +99,7 @@ console.log('item_clicked',item);
                     keyExtractor={(item, index) => index.toString()}
                     showsVerticalScrollIndicator={false}
                     style={{ margin: 8 }}
-                />
-            </View>
+                />}
         </SafeAreaView>
     )
 }

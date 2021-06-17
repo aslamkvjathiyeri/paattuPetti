@@ -1,4 +1,4 @@
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -9,6 +9,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 
 import SignUp from './signup'
 import Home from './home'
+import DetailPage from './detailPage'
 import Profile from './profile'
 
 const Stack = createStackNavigator();
@@ -22,6 +23,7 @@ function HomeStack() {
         component={Home}
         options={{ headerShown: false }}
       />
+
     </Stack.Navigator>
   );
 }
@@ -63,21 +65,28 @@ function App() {
 
   return (
     <NavigationContainer>{
-      userData ?
+      userData ? <>
         <Stack.Navigator initialRouteName={"Login"} >
           <Stack.Screen
             name="Login"
             component={SignUp}
-            options={{ headerShown: false,  }}
+            options={{ headerShown: false, }}
           />
-        </Stack.Navigator> :
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Home"
-            component={SideMenu}
-            options={{ headerShown: false,  }}
-          />
-        </Stack.Navigator>}
+        </Stack.Navigator></> :
+        <>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Home"
+              component={SideMenu}
+              options={{ headerShown: false, }}
+            />
+            <Stack.Screen
+              name="DetailPage"
+              component={DetailPage}
+              options={{ headerShown: false }}
+            />
+          </Stack.Navigator>
+        </>}
     </NavigationContainer>
   );
 }

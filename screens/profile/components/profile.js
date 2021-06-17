@@ -8,8 +8,9 @@ import { useSelector, useDispatch } from 'react-redux'
 const { height, width } = Dimensions.get('screen')
 
 function App({ navigation }) {
-    const userData = useSelector(state => state.user?.userData)
     const dispatch = useDispatch()
+    const userData = useSelector(state => state.user?.userData)
+    const [notif, setNotif] = useState(true)
 
     function logout() {
         Alert.alert(
@@ -45,11 +46,11 @@ function App({ navigation }) {
                 <View style={styles.notification}>
                     <Text style={styles.notificationText}>Notifications</Text>
                     <Switch
-                        // value={this.state.notification}
-                        // onValueChange={this.onToggleNotification}
+                        value={notif}
+                        onValueChange={()=>setNotif(!notif)}
                         thumbColor='white'
-                        trackColor={{ false: '#red', true: '#a1a1a1' }}
-                        ios_backgroundColor={'#red'}
+                        trackColor={{  true: 'green' }}
+                        ios_backgroundColor={'grey'}
                     />
                 </View>
                 <TouchableOpacity style={styles.notification} >
