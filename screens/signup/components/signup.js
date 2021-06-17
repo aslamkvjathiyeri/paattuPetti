@@ -23,22 +23,69 @@ const { height, width } = Dimensions.get("screen");
 function App({ navigation }) {
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
-  const [mobileNum,setMobileNum] = useState('');
+  const [mobileNum, setMobileNum] = useState('');
   const [password, setPassword] = useState('');
-  const [alertMsg,setAlert] = useState(false);
-  const [loading,setloading] = useState(false);
+  const [alertMsg, setAlert] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [loading, setloading] = useState(false);
   const dispatch = useDispatch()
 
 
   function loginAction() {
-    if(userName&&email&&mobileNum&&password){
-    const user = { username: userName,email:email,phone:mobileNum, password: password }
-    dispatch(fetchUser(user, navigation))}
-    else{
+    if (checkError()) {
+      const user = { username: userName, email: email, phone: mobileNum, password: password }
+      dispatch(fetchUser(user, navigation))
+    }
+    else {
       setAlert(true),
-      setTimeout(()=>{
-        setAlert(false)
-      },3000)
+        setTimeout(() => {
+          setAlert(false)
+        }, 3000)
+    }
+  }
+
+  function validate(text) {
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    if (reg.test(text) === false) {
+      return false;
+    }
+    else {
+      return true
+    }
+  }
+  function checkError() {
+    if (userName && email && mobileNum && password) {
+      if (!validate(email)) {
+        return false
+      }
+      else if (mobileNum.length != 10) {
+        return false
+      }
+      else if (password.length < 3) {
+        return false
+      }
+      else if (userName.length < 3) {
+        return false
+      }
+      else return true
+    }
+    else return false
+  }
+
+  function showError() {
+    if (alertMsg) {
+      if (userName.length < 3) {
+        return <Text style={styles.alertTxt}>* name required atleast 5 characters</Text>
+      }
+      else if (!validate(email)) {
+        return <Text style={styles.alertTxt}>* insert a valid email</Text>
+      }
+      else if (mobileNum.length != 10) {
+        return <Text style={styles.alertTxt}>* required 10 digit phone number</Text>
+      }
+      else if (password.length < 3) {
+        return <Text style={styles.alertTxt}>* password required atleast 3 characters</Text>
+      }
     }
   }
 
@@ -124,12 +171,12 @@ function App({ navigation }) {
             />
             <MCicons name={"lock"} size={21} color={"#rgba(84,84,84,.5)"} />
           </View>
-          <View style={{height:30}}>
-          {alertMsg&&<Text style={styles.alertTxt}>* credentials mismatching</Text>}
+          <View style={{ height: 30 }}>
+            {showError()}
           </View>
-            <TouchableOpacity style={styles.button} onPress={loginAction}>
-              <Text style={styles.loginText}>REGISTER</Text>
-            </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={loginAction}>
+            <Text style={styles.loginText}>REGISTER</Text>
+          </TouchableOpacity>
           <Text style={styles.forgotText}>version m1.01</Text>
         </View>
       </KeyboardAvoidingView>
@@ -190,9 +237,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#f5f5f5",
     justifyContent: "space-between",
   },
-  alertTxt:{
-    color:'red',
-    opacity:.8,
+  alertTxt: {
+    color: 'red',
+    opacity: .8,
   },
   button: {
     height: 50,

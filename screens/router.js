@@ -65,28 +65,28 @@ function App() {
 
   return (
     <NavigationContainer>{
-      userData ? <>
+      userData ?
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Home"
+            component={SideMenu}
+            options={{ headerShown: false, }}
+          />
+          <Stack.Screen
+            name="DetailPage"
+            component={DetailPage}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+        :
         <Stack.Navigator initialRouteName={"Login"} >
           <Stack.Screen
             name="Login"
             component={SignUp}
             options={{ headerShown: false, }}
           />
-        </Stack.Navigator></> :
-        <>
-          <Stack.Navigator>
-            <Stack.Screen
-              name="Home"
-              component={SideMenu}
-              options={{ headerShown: false, }}
-            />
-            <Stack.Screen
-              name="DetailPage"
-              component={DetailPage}
-              options={{ headerShown: false }}
-            />
-          </Stack.Navigator>
-        </>}
+        </Stack.Navigator>
+    }
     </NavigationContainer>
   );
 }
